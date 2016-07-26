@@ -1,0 +1,11 @@
+package com.lauguobin.www.view;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/manager")
+public class ManagerViewController
+{
+	
+}

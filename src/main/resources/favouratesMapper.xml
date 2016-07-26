@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="favouratesMapper">
+
+	<insert id="insertFavo"  parameterType="Favourate">
+		insert into favourates values(#{userId},#{id})
+	</insert>
+	
+	<select id="userFavo" parameterType="int" resultMap="bookMap">
+		SELECT b.* FROM favourates f,book b WHERE b.id=f.id AND userId = #{id}
+	</select>
+	
+	<select id="favoCount" parameterType="int" resultType="int">
+		SELECT COUNT(id) FROM favourates WHERE userId = #{id};
+	</select>
+	
+	<delete id="removeFavo" parameterType="Favourate">
+		DELETE FROM favourates WHERE userId=#{userId} AND id =#{id}; 
+	</delete>
+	
+	<resultMap type="Book" id="bookMap">
+		<id property="bookid" column="id"/>
+		<result property="bookName" column="bookName"/>
+		<result property="author" column="author"/>
+		<result property="amont" column="amont"/>
+	</resultMap>
+</mapper>

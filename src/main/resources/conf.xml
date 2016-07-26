@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<package name="com.lauguobin.www.po"/>
+	</typeAliases>
+
+	<!-- development : 开发 ; work : 工作 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED"><!-- 关闭连接后放进连接池 -->
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://localhost:3306/library"  />
+				<property name="username" value="root" />
+				<property name="password" value="mysql" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="userMapper.xml"/>
+		<mapper resource="bookMapper.xml"/>
+		<mapper resource="logMapper.xml"/>
+		<mapper resource="BRMapper.xml"/>
+		<mapper resource="favouratesMapper.xml"/>
+	</mappers>
+	
+</configuration> 
