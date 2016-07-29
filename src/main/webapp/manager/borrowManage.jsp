@@ -1,15 +1,10 @@
 <%@page import="com.lauguobin.www.service.*,java.util.*,com.lauguobin.www.po.*"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
-@SuppressWarnings("unchecked")
-List<BorrowInfo> list = (List<BorrowInfo>)request.getAttribute("borrowRequest");
-if(list == null)
-{
-	request.getRequestDispatcher("../BorrowRequestServlet").forward(request, response);
-	return ;
-}
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html>
@@ -40,20 +35,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li><a href="manager/addbook.jsp">上架新书</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
+							<li><a href="manager/userlist">查看用户信息</a></li>
+							<li><a href="logs">查看用户日志</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
+							<li><a href="manager/tempuser">注册信息</a></li>
+							<li><a href="manager/borrowrequest">借阅信息</a></li>
 						</ul>
 					</li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
@@ -78,30 +73,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<header class="page-header">
 					<h5 class="page-title"></h5>
 				</header>
-				<%if(list.isEmpty()) {%>
-					<p class="text-danger">没有可以显示的信息！</p>
-				<%}else{ %>
-					<table >
+				<table >
 					<tr><th>用户</th><th>索引</th><th>书名</th><th>作者</th><th>请求时间</th><th>操作</th></tr>
-					<%for(BorrowInfo u : list) { %>
-						<tr>
-							<td><%= u.getUsername() %></td>
-							<td><%= u.getBookid() %></td>
-							<td><%= u.getBookName() %></td>
-							<td><%= u.getAuthor() %></td>
-							<td><%= u.getDate() %></td>
+					<c:forEach items="${borrowRequest }" var="u">
+					<tr>
+							<td>${u.username }</td>
+							<td>${u.bookid }</td>
+							<td>${u.bookName }</td>
+							<td>${u.author }</td>
+							<td>${u.date }</td>
 							<td>
-							<form action = "BorrowManageServlet" method = "post">
-								<input type = "hidden" name = "username" value = <%= u.getUsername()%>>
-								<input type = "hidden" name = "bookid" value = '<%= u.getBookid()%>'>
+							<form action = "manager/borrowmanage" method = "post">
+								<input type = "hidden" name = "username" value = "${u.username }">
+								<input type = "hidden" name = "bookid" value = '${u.bookid }'>
 								<input type = "hidden" name = "flag" value = "accept">
 								<input type = "submit" name = "admit"  value = "同意">
 								<input type = "submit" name = "refuse" value = "拒绝" onClick = "this.form.flag.value = 'refuse'">
 							</form>
 							</td>
 						</tr>
-					<%} }%>
-				 	</table>
+					</c:forEach>
+				 </table>
 			</article>
 			<!-- /Article -->
 

@@ -1,9 +1,12 @@
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +15,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta name="description" content="">
 	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
 	
-	<title>注册</title>
+	<title>登录</title>
 
 	<link rel="shortcut icon" href="assets/images/gt_favicon.png">
 	
@@ -65,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<p class="text-center text-muted">如果您没有属于您自己的账户，请<a href="regist.jsp">注册</a>一个账户。并使用您的账户登录系统。 </p>
 							<hr>
 							
-							<form action="LoginServlet" method="post">
+							<form action="login" method="post">
 								<div class="top-margin">
 									<label>Username - 用户名 <span class="text-danger">*</span></label>
 									<input type="text" class="form-control"name="username" placeholder="Username">
@@ -91,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								</div>
 								
 								<div class="top-margin">
-									<b class="text-danger"><%if(request.getAttribute("error")!=null){ %><%=request.getAttribute("error")%><% } %></b>
+									<b class="text-danger"><c:out value="${error }"/></b>
 								</div>
 								
 								

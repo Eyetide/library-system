@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="userMapper">
+<mapper namespace="com.lauguobin.www.dao.UserDao">
 	
 	<insert id="addUser" parameterType="User" >
 		insert into user values(null,#{username},#{password},#{identify},#{isReal},#{date})
 	</insert>
 	
-	<update id="updateUser" parameterType="User">
+	<update id="updateRoot" parameterType="User">
 		update user set isReal=#{isReal} where username = #{username};
 	</update>
 	
@@ -14,7 +14,7 @@
 		DELETE FROM user WHERE username = #{username}
 	</delete>
 	
-	<select id="allUsers" resultType="User">
+	<select id="getExistUser" resultType="User">
 		SELECT * FROM user;
 	</select>
 	
@@ -22,19 +22,15 @@
 		SELECT * FROM user where isReal=1;
 	</select>
 		
-	<select id="tempUsers" resultType="User">
-		SELECT * FROM user where isReal=0;
-	</select>
-	
 	<select id="getTempUsers" resultType="User">
-		select username,identify,date from user where isReal=0;
+		select userId,username,identify,date from user where isReal=0;
 	</select>
 	
 	<select id="getUserId" parameterType="User" resultType="int">
 		select userId from user where username =#{username};
 	</select>
 	
-	<select id="searchResult" resultType="User">
+	<select id="getSearchUser" resultType="User">
 		
 	</select>
 </mapper>

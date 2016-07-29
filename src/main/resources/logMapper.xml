@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="logMapper">
+<mapper namespace="com.lauguobin.www.dao.LogDao">
 	
-	<select id="allLogs" resultType="Log">
+	<select id="getAllLogs" resultType="Log">
 		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE u.`userId`=l.`userId` ;
 	</select>
 	
-	<select id="oneUserLogs" parameterType="int" resultType="Log">
+	<select id="getOneUserLogs" parameterType="int" resultType="Log">
 		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE u.`userId`=l.`userId` AND u.`userId`=#{id};
 	</select>
 	
-	<select id="getBookBorrowDay" parameterType="Log"  resultType="String">
+	<select id="getBookBorrowDate" parameterType="Log"  resultType="String">
 		SELECT borrowDay FROM LOG WHERE userId = #{userId} AND id = #{id} AND other = '未还'
+	</select>
+	
+	<select id="getSearch" parameterType="Log" resultType="Log">
+		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE 
+		u.`userId`=l.`userId` and u.username like #{username} and l.bookName like #{bookname} and l.other like #{other} 
+		<if test='id!=-1' >and l.id = #{id}</if>
+	</select>
+	
+	<select id="getSearchByOne" parameterType="Log" resultType="Log">
+		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE 
+		u.`userId`=l.`userId` and l.bookName like #{bookname} and l.other like #{other} and u.userId = #{userId} 
+		<if test='id!=-1' >and l.id = #{id}</if>
 	</select>
 </mapper>

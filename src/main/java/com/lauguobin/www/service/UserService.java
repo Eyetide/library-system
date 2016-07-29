@@ -1,19 +1,20 @@
 package com.lauguobin.www.service;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lauguobin.www.dao.UserDao;
 import com.lauguobin.www.po.*;
+import com.lauguobin.www.util.Judge;
 
 @Service
 public class UserService
 {
-	UserDao us = new UserDao();
+	@Autowired
+	private UserDao us;
 	
 	/**
 	 * 判断用户名是否重复，并判断身份
@@ -21,21 +22,46 @@ public class UserService
 	 * @param password
 	 * @param identify
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings("deprecation")
-	public boolean handleUser(String username,String password,String identify) throws Exception
+	public String handleUser(String username,String password,String repassword,String identify,String code,String randomString)
 	{
+		if(username == null || password == null || repassword == null)
+			return "请输入信息";
+		
+		String error="";
+		
+		if(!Judge.isUserName(username))
+			error = "用户名称错误";
+		if(password.length()<6||password.length()>18||repassword.length()<6||repassword.length()>18)
+			error = "密码长度必须位于6 - 18 位！";
+		if(Judge.isChinese(password))
+			error = "密码不能输入中文！";
+		if(!password.equals(repassword))
+			error = "两次密码不一致！";
+		if(identify==null)
+			error = "选择身份！";
+		if(!randomString.equalsIgnoreCase(code))
+			error = "验证码不正确！";
+		
+		if("".equals(error))
+		{
 			User user = new User(username,password,identify,false,new Date().toLocaleString());
-			List<User> list = us.getExistUser(true);
+			List<User> list = us.getExistUser();
 			//判断是不是重复
 			for(User s : list)
 				if(s.getUsername().equals(user.getUsername()))
-						return false;
-			if(identify.equals("manager"))
+						return "用户信息已存在";
+			if("manager".equals(identify))
+			{
 				user.setIsReal(true);
+				error="注册成功";
+			}
 			us.addUser(user);
-			return true;
+			if("student".equals(identify))
+				error = "注册成功，管理员验证后即可登录。";
+		}
+		return error;
 	}
 	
 	/**
@@ -45,17 +71,10 @@ public class UserService
 	 */
 	public boolean handleLogin(User user)
 	{
-		try
-		{
-			List<User> list = us.getExistUser(false);
-			for(User s : list)
-				if(s.equals(user))
-						return true;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		List<User> list = us.getExistUser();
+		for(User s : list)
+			if(s.equals(user)&&user.getIsReal())
+					return true;
 		return false;
 	}
 
@@ -63,25 +82,23 @@ public class UserService
 	 * 判断搜索条件，并显示搜索用户列表
 	 * @param search
 	 * @return
-	 * @throws IOException 
 	 */
-	public List<User> ShowSearchUsers(String[] search) throws  IOException
+	public List<User> ShowSearchUsers(String[] search)
 	{
 		String sql = "select * from user where username like '%"+search[0]+"%' or identify like '%"+search[0]+"%'";
 		if(search.length == 2)
 			sql = "select * from user where username like '%"+search[0]+"%' and identify like '%"+search[1]+"%'";
-		return new UserDao().getSearchUser(sql);
+		return us.getSearchUser(sql);
 	}
 	
 	/**
 	 * 显示所有的用户
 	 * @param isAll
 	 * @return
-	 * @throws Exception
 	 */
-	public List<User> showUsers(boolean isAll) throws Exception
+	public List<User> showUsers()
 	{
-		return new UserDao().getExistUser(isAll);
+		return us.getExistUser();
 	}
 	/**
 	 * 临时用户转正
@@ -89,15 +106,8 @@ public class UserService
 	 */
 	public void isTempUser(String username)
 	{
-		try
-		{
-			User user = new User(username,true);
-			new UserDao().tempuserToReal(user);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		User user = new User(username,true);
+		us.updateRoot(user);
 	}
 	
 	/**
@@ -106,34 +116,25 @@ public class UserService
 	 */
 	public void refuse(String username)
 	{
-		try
-		{
-			new UserDao().deleteUser(username);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		us.deleteUser(username);
 	}
 	
 	/**
 	 * 显示注册请求
 	 * @return
-	 * @throws Exception
 	 */
-	public List<User> showUsersRequests() throws Exception
+	public List<User> showUsersRequests()
 	{
-		return new UserDao().getTempUsers();
+		return us.getTempUsers();
 	}
 	
 	/**
 	 * 
 	 * @param username
 	 * @return
-	 * @throws IOException
 	 */
-	public int getUserId(String username) throws IOException
+	public int getUserId(String username)
 	{
-		return new UserDao().getUsersId(username);
+		return us.getUserId(username);
 	}
 }

@@ -38,6 +38,22 @@ public class Log implements Serializable
 		this.other = other;
 	}
 
+	public Log(String username, int id, String bookname, String other)
+	{
+		this.username = username;
+		this.id = id;
+		this.bookname = bookname;
+		this.other = other;
+	}
+
+	public Log(int userId, int id, String bookname, String other)
+	{
+		this.userId = userId;
+		this.id = id;
+		this.bookname = bookname;
+		this.other = other;
+	}
+
 	public Log(int userId, int id)
 	{
 		super();
@@ -110,5 +126,13 @@ public class Log implements Serializable
 	public void setOther(String other)
 	{
 		this.other = other;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Log [userId=" + userId + ", username=" + username + ", id=" + id + ", bookname=" + bookname
+				+ ", author=" + author + ", borrowDay=" + borrowDay + ", returnDay=" + returnDay + ", other=" + other
+				+ "]";
 	}
 }

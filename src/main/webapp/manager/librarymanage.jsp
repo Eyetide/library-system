@@ -1,15 +1,10 @@
+<%@page import="javax.sound.midi.SysexMessage"%>
 <%@page import="com.lauguobin.www.po.*,java.util.*"%>
-<%@ page language="Java" contentType="text/html; charset=UTF-8"
+<%@page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <% 
-@SuppressWarnings("unchecked")
-List<Book> list = (List<Book>)request.getAttribute("bookList");
-if(list == null)
-{
-	request.getRequestDispatcher("../LibraryShowServlet").forward(request, response);
-	return ;
-}
-request.setCharacterEncoding("utf-8");
 String tokenValue = new Date().getTime()+"";
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -28,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!-- Custom styles for our template -->
 		<link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen" >
 		<link rel="stylesheet" href="assets/css/main.css"> 
-	
+		<link rel="stylesheet" href="assets/css/s.css"> 
 		<link rel="stylesheet" href="assets/css/table.css">
 	</head>
 	
@@ -42,20 +37,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li><a href="manager/addbook.jsp">上架新书</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
+							<li><a href="manager/userlist">查看用户信息</a></li>
+							<li><a href="logs">查看用户日志</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
+							<li><a href="manager/userlist">注册信息</a></li>
+							<li><a href="manager/borrowrequest">借阅信息</a></li>
 						</ul>
 					</li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
@@ -63,18 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div><!--/.nav-collapse -->
 		</div>
 	</div> 
-	
-<%-- 	<form action = "SearchBookSerblet" method = "post">
-		<p>
-			<input type = "text" name = "search" class = "search"  value = "<%=request.getParameter("search") %>"style = "width:500px;color:#5b5b5b;" placeholder = "输入图书序列号、图书名称或者作者名称">
-			<input type = "hidden" name = "token" value = "<%=tokenValue%>">
-			<%session.setAttribute("token", tokenValue); %>
-			<button type = "submit"  class = "search">点我搜索</button>
-		</p>
-	</form> --%>
-	
 	<header id="head" class="secondary"></header>
-
 	<!-- container -->
 	<div class="container">
 
@@ -89,44 +73,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<article class="col-xs-12 maincontent">
 				<header class="page-header">
 					<h5 class="page-title"></h5>
-										
-<%-- 	<form action = "SearchBookSerblet" method = "post">
-		<p>
-			<input type = "text" name = "search" class = "search"  value = "<%=request.getParameter("search") %>"style = "width:500px;color:#5b5b5b;" placeholder = "输入图书序列号、图书名称或者作者名称">
-			<input type = "hidden" name = "token" value = "<%=tokenValue%>">
-			<%session.setAttribute("token", tokenValue); %>
-			<button type = "submit"  class = "search">点我搜索</button>
-		</p>
-	</form> --%>
-		</header>
+				</header>
+				<form action = "search" method = "post">
+					图书id<input type = "text" name = "bookid" class="search"  placeholder = "输入图书序列号">
+					         图书名称<input type = "text" name = "bookName" class="search" placeholder = "输入图书名称">
+					         作者<input type = "text" name = "author" class="search" placeholder = "输入作者名称">
+					         库存<input type = "text" name = "amont" class="search" placeholder = "输入库存">
+					<input type = "hidden" name = "token" value = "<%=tokenValue%>">
+					<%session.setAttribute("token", tokenValue); %>
+					<button class="search" type="submit">搜索</button>
+				</form>
 			<table>
 				<tr><th>序列号</th><th>书本名称</th><th>图片</th><th>作者</th><th>现有库存</th><th>详细</th></tr>
-				<% if(list.isEmpty())
-				{
-					%>
-					<tr class="text-danger"> <td>没有书籍！</td></tr>
-					<%
-				}
-				for(Book b : list) {%>
+				<c:forEach items="${bookList}" var="b">
 				<tr>
-					<td><%=b.getBookid()%></td>
-					<td><%=b.getBookName() %></td>
-					<td><img src='<%=b.getBookid()%>.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
-					<td><%=b.getAuthor() %></td>
-					<td><%=b.getAmont() %></td>
+					<td>${b.bookid}</td>
+					<td>${b.bookName}</td>
+					<td><img src='assets/images/${b.bookid}.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
+					<td>${b.author }</td>
+					<td>${b.amont }</td>
 					<td>
 						<form action = "manager/updatebook.jsp" method = "post">
-							<input type = "hidden"  name = "bookid" value = <%=b.getBookid() %> >
-							<input type = "hidden"  name = "bookname" value = '<%=b.getBookName() %>' >
-							<input type = "hidden"  name = "author" value = '<%=b.getAuthor() %>' >
-							<input type = "hidden"  name = "amont" value = <%=b.getAmont() %> >
+							<input type = "hidden"  name = "bookid" value = "${b.bookid}" >
+							<input type = "hidden"  name = "bookname" value = '${b.bookName}' >
+							<input type = "hidden"  name = "author" value = '${b.author }' >
+							<input type = "hidden"  name = "amont" value = "${b.amont }" >
 							<input type = "submit" name = "update"  value = "修改信息" >
 							&nbsp;&nbsp;&nbsp;
-							<input type = "button" name = "delete" value = "下架书本" onclick="javascript:window.location.href='DeleteBookServlet?bookid=<%=b.getBookid()%>';">
+							<input type = "button" name = "delete" value = "下架书本" onclick="javascript:window.location.href='manager/delete?bookid=${b.bookid}';">
 						</form>
 					</td>
 				</tr>
-			    <%} %>
+				</c:forEach>
 			    </table>
 			</article>
 			<!-- /Article -->

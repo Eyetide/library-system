@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="bookMapper">
+<mapper namespace="com.lauguobin.www.dao.BookDao">
 	
 	<insert id="addBook" parameterType="Book" >
 		insert into book values(#{bookid},#{bookName},#{author},#{amont})
@@ -14,8 +14,14 @@
 		DELETE FROM book WHERE id = #{id}
 	</delete>
 	
-	<select id="allBooks" resultMap="bookMap">
+	<select id="getExistBooks" resultMap="bookMap">
 		select * from book;
+	</select>
+	
+	<select id="getSearchBooks" parameterType="Book" resultMap="bookMap">
+		select * from book where bookName like #{bookName} and author like #{author} 
+		<if test='amont!=-1'> and amont = #{amont}</if>
+		<if test='bookid!=-1'> and id = #{bookid}</if>
 	</select>
 	
 	<resultMap type="Book" id="bookMap">

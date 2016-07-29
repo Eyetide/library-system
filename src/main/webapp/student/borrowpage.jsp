@@ -1,15 +1,11 @@
 <%@page import="com.lauguobin.www.service.*,java.util.*,com.lauguobin.www.po.*"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
+String tokenValue = new Date().getTime()+"";
 String path = request.getContextPath();
-@SuppressWarnings("unchecked")
-List<Book> list = (List<Book>)request.getAttribute("myborrowbook");
-if(list == null)
-{
-	request.getRequestDispatcher("../BorrowPageShow").forward(request, response);
-	return ;
-}
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html>
@@ -40,15 +36,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="student/librarypage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="student/favourates.jsp">收藏夹</a></li>
-							<li><a href="student/borrowpage.jsp">已借书籍</a></li>
+							<li><a href="student/yourbooks">已借书籍</a></li>
 						</ul>
 					</li>
-					<li><a href="student/loginfo.jsp">借阅日志</a></li>
+					<li><a href="logs">借阅日志</a></li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
@@ -71,25 +67,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<header class="page-header">
 					<h5 class="page-title"></h5>
 				</header>
-				<%if(list.isEmpty()) {%>
-					<p class="text-danger">没有可以显示的信息！</p>
-				<%}else{ %>
 					<table >
 						<tr><th>序列号</th><th>书本名称</th><th>图片</th><th>作者</th><th>操作</th></tr>
-						<%for(Book b : list) {%>
+						<c:forEach items="${myborrowbook }" var="b">
 						<tr>
-							<td><%=b.getBookid()%></td>
-							<td><%=b.getBookName() %></td>
-							<td><img src='<%=b.getBookid()%>.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
-							<td><%=b.getAuthor() %></td>
+							<td>${b.bookid }</td>
+							<td>${b.bookName }</td>
+							<td><img src='assets/images/${b.bookid }.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
+							<td>${b.author }</td>
 							<td>
-								<form action = "ReturnServlet" method = "post">
-									<input type = "hidden"  name = "bookid" value = <%=b.getBookid() %> >
-									<input type = "hidden"  name = "username" value = '<%=session.getAttribute("username") %>' >
+								<form action = "student/return" method = "post">
+									<input type = "hidden"  name = "bookid" value = "${b.bookid }" >
+									<input type = "hidden"  name = "username" value = '${b.bookName }' >
 									<input type = "submit"  name = "borrow" value = "归还">
 								</form>
 							</td>
-						<%} }%>
+						</tr>
+						</c:forEach>
 					</table>
 			</article>
 			<!-- /Article -->

@@ -1,6 +1,8 @@
 <%@page import="com.lauguobin.www.service.*,com.lauguobin.www.po.*,java.util.List"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -34,20 +36,20 @@ request.setCharacterEncoding("utf-8");
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li><a href="manager/addbook.jsp">上架新书</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
+							<li><a href="manager/userlist">查看用户信息</a></li>
+							<li><a href="logs">查看用户日志</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
+							<li><a href="manager/userlist">注册信息</a></li>
+							<li><a href="manager/borrowrequest">借阅信息</a></li>
 						</ul>
 					</li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
@@ -81,7 +83,7 @@ request.setCharacterEncoding("utf-8");
 							<p class="text-center text-muted">根据提示信息进行。</p>
 							<hr>
 							
-							<form action = "UpdateBookServlet" enctype="multipart/form-data" method = "post">
+							<form action = "manager/updatebook" enctype="multipart/form-data" method = "post">
 								<div class="top-margin">
 									<label>书本索取号 - Id <span class="text-danger">*</span></label>
 									<p><%=request.getParameter("bookid") %><input type = "hidden" name = "bookid"  value = '<%=request.getParameter("bookid")%>'></p>
@@ -106,8 +108,8 @@ request.setCharacterEncoding("utf-8");
 
 								<div class="row">
 									<div class="col-lg-8">
-										<p class="text-danger"><%if(request.getAttribute("error")!=null){ %><%=request.getAttribute("error")%><% } %></p>
-										<b><a href="manager/librarymanage.jsp">返回</a></b>
+										<p class="text-danger"><c:out value="${error}"/></p>
+										<b><a href="books">返回</a></b>
 									</div>
 									<div class="col-lg-4 text-right">
 										<button class="btn btn-action" type="submit">提交信息</button>

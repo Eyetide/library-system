@@ -4,22 +4,26 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lauguobin.www.dao.LogDao;
 import com.lauguobin.www.po.Log;
+import com.lauguobin.www.util.Judge;
 
 @Service
 public class LogService
 {
+	@Autowired
+	private LogDao logDao;
 	/**
 	 * 显示所有用户信息
 	 * @return
 	 * @throws IOException 
 	 */
-	public List<Log> showLogs() throws IOException
+	public List<Log> showLogs()
 	{
-		return new LogDao().getLogs();
+		return logDao.getAllLogs();
 	}
 	
 	/**
@@ -28,28 +32,11 @@ public class LogService
 	 * @return
 	 * @throws IOException 
 	 */
-	public List<Log> showUserLogs(int userId) throws IOException 
+	public List<Log> showUserLogs(int userId)
 	{
-		return new LogDao().getLogs(userId);
+		return logDao.getOneUserLogs(userId);
 	}
 
-	/**
-	 * 根据搜索条件显示日志
-	 * @param search
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 */
-	public List<Log> showSearchLogs(String[] search) throws ClassNotFoundException, SQLException
-	{
-		String sql = "select * from log where id = '" +search[0]+"' or username like '%"+search[0]+"%' or bookName like '%" +search[0]+ "%' or author like '%"+search[0]+"%'";
-		if(search.length == 2)
-			sql = "SELECT * FROM LOG WHERE  username LIKE '%"+search[0]+"%' AND id = '"+search[1]+"' UNION ALL SELECT * FROM LOG WHERE username LIKE '%"+search[0]+"%' AND bookName LIKE '%"+search[1]+"%' UNION ALL SELECT * FROM LOG WHERE username LIKE '%"+search[0]+"%' AND author LIKE '%"+search[1]+"%'";
-		if(search.length == 3)
-			sql = "select * from log where username like '%"+search[0]+"%' and bookName like '%"+search[1]+"%' or author like '%"+search[2]+"%'";
-		return new LogDao().getSearchLogs(sql);
-	}
-	
 	/**
 	 * 某个用户的搜索条件
 	 * @param search
@@ -58,18 +45,48 @@ public class LogService
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public List<Log> showStuSearchLogs(String[] search,String username ) throws ClassNotFoundException, SQLException
+	public List<Log> showStuSearchLogs(int userId,String bookid,String bookName,String other)
 	{
-		String sql = "SELECT * FROM LOG WHERE username = '"+username+"' AND id = '"+search[0]+"' "
-				+ "OR username = '"+username+"' AND bookName LIKE '%"+search[0]+"%' "
-				+ "OR username = '"+username+"' AND author LIKE '%"+search[0]+"%'"
-				+ "OR username = '"+username+"' AND other LIKE '%"+search[0]+"%'";
-		if(search.length == 2)
-			sql = "select * from log where username = '"+username+"' and bookName like '%"+search[0]+"%'  and author like '%"+search[1]+"%'"
-				+ " or username = '"+username+"' and bookName like '%"+search[0]+"%'  and other like '%"+search[1]+"%'"
-				+ " or username = '"+username+"' and author like '%"+search[0]+"%'  and other like '%"+search[1]+"%'";
-		if(search.length == 3)
-			sql = "select * from log where username = '"+username+"' and bookName like '%"+search[0]+"%'  and author like '%"+search[1]+"%' and other like '%"+search[2]+"%'";
-		return new LogDao().getSearchLogs(sql);
+		if("".equals(bookid) || !Judge.isInteger(bookid))
+			bookid="-1";
+		bookName = "%" + bookName + "%";
+		other = "%" + other + "%";
+		Log log = new Log(userId,Integer.parseInt(bookid), bookName, other);
+		System.out.println(log);
+		return logDao.getSearchByOne(log);
+	}
+	
+	/**
+	 * 搜索条件
+	 * @param search
+	 * @param username
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public List<Log> showSearchLogs(String username,String bookid,String bookName,String other)
+	{
+		if("".equals(bookid) || !Judge.isInteger(bookid))
+			bookid="-1";
+		username = "%" + username + "%";
+		bookName = "%" + bookName + "%";
+		other = "%" + other + "%";
+		Log log = new Log(username,Integer.parseInt(bookid), bookName, other);
+		return logDao.getSearch(log);
+	}
+	
+	/**
+	 * 获取借书日期
+	 * @param userId
+	 * @param bookid
+	 * @return
+	 */
+	public String getBookBorrowDate(int userId,int bookid)
+	{
+		String date = logDao.getBookBorrowDate(userId, bookid);
+		if(date!=null)
+			return date;
+		else
+			return "";
 	}
 }

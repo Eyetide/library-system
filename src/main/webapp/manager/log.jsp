@@ -1,16 +1,12 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.lauguobin.www.service.*,com.lauguobin.www.po.*,java.util.List"%>
+<%@page import="com.lauguobin.www.service.*,com.lauguobin.www.po.*,java.util.*"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
+String tokenValue = new Date().getTime()+"";
 String path = request.getContextPath();
-@SuppressWarnings("unchecked")
-List<Log> list = (List<Log>)request.getAttribute("logs");
-if(list == null)
-{
-	request.getRequestDispatcher("../LogShow").forward(request, response);
-	return ;
-}
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html>
@@ -27,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!-- Custom styles for our template -->
 		<link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen" >
 		<link rel="stylesheet" href="assets/css/main.css"> 
-	
+		<link rel="stylesheet" href="assets/css/s.css">
 		<link rel="stylesheet" href="assets/css/table.css">
 	</head>
 	
@@ -41,20 +37,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li><a href="manager/addbook.jsp">上架新书</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
+							<li><a href="manager/userlist">查看用户信息</a></li>
+							<li><a href="logs">查看用户日志</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
+							<li><a href="manager/tempuser">注册信息</a></li>
+							<li><a href="manager/borrowrequest">借阅信息</a></li>
 						</ul>
 					</li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
@@ -81,20 +77,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<header class="page-header">
 					<h5 class="page-title"></h5>
 				</header>
-				
+				<form action = "manager/search" method = "post">
+					用户名称<input type = "text" name = "username" class="search" placeholder = "输入用户名称">
+					         图书id<input type = "text" name = "bookid" class="search"  placeholder = "输入图书序列号">
+					         图书名称<input type = "text" name = "bookname" class="search" placeholder = "输入图书名称">
+					         备注<input type = "text" name = "other" class="search" placeholder = "输入库存">
+					<input type = "hidden" name = "token" value = "<%=tokenValue%>">
+					<%session.setAttribute("token", tokenValue); %>
+					<button class="search" type="submit">搜索</button>
+				</form>
 				<table >
 				<tr><th>操作用户</th><th>借出书本序列号</th><th>借出书名</th><th>作者</th><th>借出时间</th><th>归还时间</th><th>备注</th></tr>
-				<%for(Log g : list) {%>
-				<tr>
-					<td><%=g.getUsername() %></td>
-					<td><%=g.getId() %></td>
-					<td><%=g.getBookname() %></td>
-					<td><%=g.getAuthor() %></td>
-					<td><%=g.getBorrowDay() %></td>
-					<td><%=g.getReturnDay() %></td>
-					<td><%=g.getOther() %> </td>
-				</tr>
-				<%} %>
+				<c:forEach items="${logs }" var="l">
+					<tr>
+						<td>${l.username }</td>
+						<td>${l.id }</td>
+						<td>${l.bookname }</td>
+						<td>${l.author }</td>
+						<td>${l.borrowDay }</td>
+						<td>${l.returnDay }</td>
+						<td>${l.other } </td>
+					</tr>
+				</c:forEach>
 			 	</table>
 				
 			</article>

@@ -3,6 +3,7 @@ package com.lauguobin.www.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lauguobin.www.dao.FavouratesDao;
@@ -12,6 +13,8 @@ import com.lauguobin.www.po.Favourate;
 @Service
 public class FavouratesService
 {
+	@Autowired
+	private FavouratesDao fd;
 	/**
 	 * 判断是否可以收藏
 	 * @param username
@@ -20,9 +23,8 @@ public class FavouratesService
 	 * @param author
 	 * @throws IOException 
 	 */
-	public void collectBook(int userId,int bookid) throws IOException
+	public void collectBook(int userId,int bookid)
 	{
-		FavouratesDao fd = new FavouratesDao();
 		List<Book> list = fd.getFavourates(userId);
 		
 		//防止刷新导致的数据提交重复
@@ -44,15 +46,8 @@ public class FavouratesService
 	 */
 	public void deleteFavourte(int userId,String id)
 	{
-		try
-		{
 			Favourate favo = new Favourate(userId,Integer.parseInt(id));
-			new FavouratesDao().deleteFavourate(favo);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+			fd.removeFavourate(favo);
 	}
 
 	/**
@@ -61,8 +56,8 @@ public class FavouratesService
 	 * @return
 	 * @throws IOException 
 	 */
-	public List<Book> showUserFavourates(int userId) throws IOException 
+	public List<Book> showUserFavourates(int userId)
 	{
-		return new FavouratesDao().getFavourates(userId);
+		return fd.getFavourates(userId);
 	}
 }

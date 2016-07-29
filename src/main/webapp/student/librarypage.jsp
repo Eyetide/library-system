@@ -1,21 +1,11 @@
 <%@page import="com.lauguobin.www.service.*,java.util.*,com.lauguobin.www.po.*"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String tokenValue = new Date().getTime()+"";
-@SuppressWarnings("unchecked")
-List<Book> list = (List<Book>)request.getAttribute("bookList");
-@SuppressWarnings("unchecked")
-List<Book> borrowList = (List<Book>)session.getAttribute("borrowlist");
-@SuppressWarnings("unchecked")
-List<Book> favourates = (List<Book>)session.getAttribute("favourates");
-if(list == null)
-{
-	request.getRequestDispatcher("../LibraryShowServlet").forward(request, response);
-	return ;
-}
-request.setCharacterEncoding("utf-8");
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html>
@@ -32,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!-- Custom styles for our template -->
 		<link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen" >
 		<link rel="stylesheet" href="assets/css/main.css"> 
-		<link rel="stylesheet" href="assets/css/search.css"> 
+		<link rel="stylesheet" href="assets/css/s.css"> 
 		<link rel="stylesheet" href="assets/css/table.css">
 	</head>
 	
@@ -46,15 +36,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="student/librarypage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="student/favourates.jsp">收藏夹</a></li>
-							<li><a href="student/borrowpage.jsp">已借书籍</a></li>
+							<li><a href="student/yourbooks">已借书籍</a></li>
 						</ul>
 					</li>
-					<li><a href="student/loginfo.jsp">借阅日志</a></li>
+					<li><a href="logs">借阅日志</a></li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
@@ -77,71 +67,61 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<header class="page-header">
 					<h5 class="page-title"></h5>
 				</header>
-					<form action = "SearchBookSerblet" method = "post">
-						<input type = "text" name = "search" class="search" style = "width:500px;color:#5b5b5b;" placeholder = "输入图书序列号、图书名称或者作者名称">
-						<input type = "hidden" name = "token" value = "<%=tokenValue%>">
-						<%session.setAttribute("token", tokenValue); %>
-						<button class="search" type="submit">搜索</button>
-					</form>
-				<%if(list.isEmpty()) {%>
-					<p class="text-danger">没有可以显示的信息！</p>
-				<%}else{ %>
+					<form action = "search" method = "post">
+					图书id<input type = "text" name = "bookid" class="search"  placeholder = "输入图书序列号">
+					         图书名称<input type = "text" name = "bookName" class="search" placeholder = "输入图书名称">
+					         作者<input type = "text" name = "author" class="search" placeholder = "输入作者名称">
+					         库存<input type = "text" name = "amont" class="search" placeholder = "输入库存">
+					<input type = "hidden" name = "token" value = "<%=tokenValue%>">
+					<%session.setAttribute("token", tokenValue); %>
+					<button class="search" type="submit">搜索</button>
+				</form>
 	<table >
 	<tr><th>序列号</th><th>书本名称</th><th>图片</th><th>作者</th><th>现有库存</th><th>详细</th></tr>
-	<% for(Book b : list) {%>
+	
+	<c:forEach items="${bookList }" var="b">
 	<tr>
-		<td><%=b.getBookid()%></td>
-		<td><%=b.getBookName() %></td>
-		<td><img src='<%=b.getBookid()%>.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
-		<td><%=b.getAuthor() %></td>
-		<td><%=b.getAmont() %></td>
+		<td>${b.bookid }</td>
+		<td>${b.bookName }</td>
+		<td><img src='assets/images/${b.bookid }.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
+		<td>${b.author }</td>
+		<td>${b.amont }</td>
 		<td>
-			<form action = "BorrowFavourateServlet" method = "post">
-				<input type = "hidden"  name = "bookid" value = <%=b.getBookid() %> >
-				<input type = "hidden"  name = "bookname" value = '<%=b.getBookName() %>' >
-				<input type = "hidden"  name = "author" value = '<%=b.getAuthor() %>' >
-				<input type = "hidden"  name = "amont" value = <%=b.getAmont() %> >
+			<form action = "student/borrowfavourate" method = "post">
+				<input type = "hidden"  name = "bookid" value = ${b.bookid } >
+				<input type = "hidden"  name = "bookName" value = '${b.bookName }' >
+				<input type = "hidden"  name = "author" value = '${b.author }' >
+				<input type = "hidden"  name = "amont" value = ${b.amont } >
 				<input type = "hidden" name = "flag" value = "borrow">
-			<%
-				boolean flag = false;
-				for(Book bb : borrowList)
-				{
-					if(bb.getBookid() == b.getBookid())
-					{
-			%>已申请或借阅<%
-						flag = true;
-						break;
-					}
-				}
-				if(b.getAmont()==0)
-				{
-					flag = true;
-					%>库存不足<%
-				}
-				if(!flag){
-			%>
-				<input type = "submit" name = "borrow"  value = "借阅" >
-			<%}%>
-				&nbsp;&nbsp;&nbsp;
-							<%
-				flag = false;
-				for(Book f : favourates)
-				{
-					if(f.getBookid() == b.getBookid())
-					{
-			%>已收藏<%
-						flag = true;
-						break;
-					}
-				}
-				if(!flag){
-			%>
-			<input type = "submit" name = "collect" value = "收藏" onclick="this.form.flag.value = 'collect'">
-			<%}%>
+				<c:set var="flag" value="${false}"/>
+				<c:forEach items="${sessionScope.borrowlist }" var="bl">
+					<c:if test="${b.bookid==bl.bookid }">
+						<c:set var="flag" value="${true}"></c:set>
+						已申请或借阅
+					</c:if>
+				</c:forEach>
+				<c:if test="${b.amont==0 }">
+					<c:set var="flag" value="${true}"/>
+					库存不足
+				</c:if>
+				<c:if test="${flag==false }">
+					<input type = "submit" name = "borrow"  value = "借阅" >
+				</c:if>
+				<c:set var="flag" value="${false}"/>
+				<c:forEach items="${sessionScope.favourates }" var="f">
+					<c:if test="${f.bookid==b.bookid }">
+						已收藏
+						<c:set var="flag" value="${true}"/>
+					</c:if>
+				</c:forEach>
+				
+				<c:if test="${flag==false }">
+					<input type = "submit" name = "collect" value = "收藏" onclick="this.form.flag.value = 'collect'">
+				</c:if>
 			</form>
 		</td>
 	</tr>
-    <%} }%>
+	</c:forEach>
     </table>
 			</article>
 			<!-- /Article -->

@@ -1,5 +1,7 @@
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -70,7 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<p class="text-center text-muted">如果您已经注册，请<a href="signin.jsp">登录</a>. 如果没有账号，请此页面输入您的相关信息以注册一个账号. </p>
 							<hr>
 
-							<form action="regist">
+							<form action="regist" method="post">
 								<div class="top-margin">
 									<label>User Name - 用户名  </label><span class="text-danger">*</span>
 									<input type="text" class="form-control" name="username" placeholder="Username">
@@ -88,31 +90,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								</div>
 								
 								<div class="top-margin">
-									<label>Identify - 身份选择<span class="text-danger">*</span></label>
 									<div class="row top-margin">
 										<div class="col-sm-6">
-										<p class="text-center text-muted">
-											学生<input type = "radio"  name = "identify" value = "student">
-										</p>
+										<label>Identify - 身份选择<span class="text-danger">*</span></label>
+										<div style="margin-top: 10px;">
+											<p class="text-center text-muted">
+												学生<input type = "radio"  name = "identify" value = "student">
+												管理员<input type = "radio"  name = "identify" value = "manager">
+											</p>
 										</div>
+										</div>
+										
 										<div class="col-sm-6">
+										<label>Code - 验证码  </label><span class="text-danger">*</span>
 										<p class="text-center text-muted">
-											管理员<input type = "radio"  name = "identify" value = "manager">
+			           						<input type="text" id="captcha" name="code" class="form-control" placeholder="点击图片更改" />
 										</p>
 										</div>
 									</div>
 								</div>
 								
 								<div class="top-margin">
-									<b class="text-danger"><%if(request.getAttribute("error")!=null){ %><%=request.getAttribute("error")%><% } %></b>
+									<b class="text-danger"><c:out value="${error }"/></b>
 								</div>
 
 								<hr>
 								<div class="row">
 									<div class="col-lg-8">
-										<label class="checkbox">
-											请输入验证码
-										</label>      
+									<img id="captchaImage"  src="captcha"/>
 									</div>
 									<div class="col-lg-4 text-right">
 										<button class="btn btn-action" type="submit">提交</button>
@@ -201,6 +206,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script src="assets/js/headroom.min.js"></script>
 	<script src="assets/js/jQuery.headroom.min.js"></script>
+	<script src="assets/js/myscript.js"></script>
 	<script src="assets/js/template.js"></script>
 </body>
 </html>

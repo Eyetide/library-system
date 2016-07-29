@@ -1,6 +1,8 @@
 <%@page import="com.lauguobin.www.po.*,java.util.*"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <% 
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -24,61 +26,64 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</head>
 	
 	<body class="home">
-	<%if("manager".equals(session.getAttribute("identify"))) { %>
-	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="manager/librarymanage.jsp">Library System</a>
+	<c:choose>	
+		<c:when test="${'manager'==sessionScope.identify }">
+		<!-- Fixed navbar -->
+		<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+					<a class="navbar-brand" href="home.jsp">Library System</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav pull-right">
+						<li class="active"><a href="books">书籍</a></li>
+						<li><a href="manager/addbook.jsp">上架新书</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="manager/userlist">查看用户信息</a></li>
+								<li><a href="logs">查看用户日志</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="manager/tempuser">注册信息</a></li>
+								<li><a href="manager/borrowrequest">借阅信息</a></li>
+							</ul>
+						</li>
+						<li><a class="btn" href="signin.jsp">退出</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
 			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
-					<li><a href="manager/addbook.jsp">上架新书</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
-						</ul>
-					</li>
-					<li><a class="btn" href="login.jsp">退出</a></li>
-				</ul>
-			</div><!--/.nav-collapse -->
-		</div>
-	</div> 
-	<%} else if("student".equals(session.getAttribute("identify"))) {%>
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="home.jsp">Library System</a>
+		</div> 
+		</c:when>
+		<c:otherwise>
+		<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+					<a class="navbar-brand" href="home.jsp">Library System</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav pull-right">
+						<li class="active"><a href="books">书籍</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="student/favourates.jsp">收藏夹</a></li>
+								<li><a href="student/yourbooks">已借书籍</a></li>
+							</ul>
+						</li>
+						<li><a href="logs">借阅日志</a></li>
+						<li><a class="btn" href="signin.jsp">退出</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
 			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="student/librarypage.jsp">书籍</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="student/favourates.jsp">收藏夹</a></li>
-							<li><a href="student/borrowpage.jsp">已借书籍</a></li>
-						</ul>
-					</li>
-					<li><a href="student/loginfo.jsp">借阅日志</a></li>
-					<li><a class="btn" href="signin.jsp">退出</a></li>
-				</ul>
-			</div><!--/.nav-collapse -->
-		</div>
-	</div> 
-	<%} %>
+		</div> 
+		</c:otherwise>
+	</c:choose>
 	
 	<!-- Header -->
 	<header id="head">

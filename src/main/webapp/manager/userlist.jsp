@@ -2,15 +2,10 @@
 <%@page import="com.lauguobin.www.po.User"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
-if(request.getAttribute("userlist")==null)
-{
-	request.getRequestDispatcher("../UserShowServlet").forward(request, response);
-	return ;
-}
-@SuppressWarnings("unchecked")
-List<User> list = (List<User>)request.getAttribute("userlist");
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html>
@@ -41,20 +36,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li><a href="manager/addbook.jsp">上架新书</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
+							<li><a href="manager/userlist">查看用户信息</a></li>
+							<li><a href="logs">查看用户日志</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
+							<li><a href="manager/tempuser">注册信息</a></li>
+							<li><a href="manager/borrowrequest">借阅信息</a></li>
 						</ul>
 					</li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
@@ -79,27 +74,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<article class="col-xs-12 maincontent">
 				<header class="page-header">
 					<h5 class="page-title"></h5>
-<!-- 						<form action = "UserSearchServlet" method = "post">
-		<p>
-			<input type = "text" name = "search" class = "search" style = "width:500px;color:#5b5b5b;" placeholder = "输入用户信息">
-			<button type = "submit"  class = "search">点我搜索</button>
-		</p>
-	</form> -->
+
 				</header>
-				<%if(list.isEmpty()) {%>
-					<p class="text-danger">没有可以显示的信息！</p>
-				<%}else{ %>
 					<table >
-						<tr><th>用户名</th><th>密码</th><th>身份</th></tr>
-						<%for(User u : list) {%>
+						<tr><th>用户名</th><th>身份</th><th>注册日期</th><th>是否通过验证</th><th>操作</th></tr>
+						<c:forEach items="${userlist}" var="ul">
 						<tr>
-							<td><%= u.getUsername() %></td>
-							<td><%= u.getPassword() %></td>
-							<td><%= u.getIdentify() %></td>
+							<td>${ul.username }</td>
+							<td>${ul.identify }</td>
+							<td>${ul.date }</td>
+							<td>${ul.isReal }</td>
+							<td>//TODO</td>
 						</tr>
-						<%} %>
+						</c:forEach>
 					</table>
-				 	<%} %>
 			</article>
 			<!-- /Article -->
 

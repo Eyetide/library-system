@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="brMapper">
+<mapper namespace="com.lauguobin.www.dao.BorrowReturnDao">
 	
-	<select id="amont" parameterType="int" resultType="int">
+	<select id="booksAmont" parameterType="int" resultType="int">
 		select amont from book where id = #{id}
 	</select>
 
-	<select id="getTempBorrow" resultMap="borrowInfo">
+	<select id="getAllTempBorrow" resultMap="borrowInfo">
 		SELECT u.`username`,b.`id`,b.`bookName`,b.`author`,b.`date` FROM USER u,borrow b WHERE u.`userId`=b.`userId` AND isAccepted = 0;
 	</select>
 	
-	<select id="aUserHaveBorrow"  parameterType="int" resultMap="bookMap">
+	<select id="getUserHave"  parameterType="int" resultMap="bookMap">
 		SELECT id,bookName,author FROM borrow WHERE userId = #{id} and isAccepted = 1;
 	</select>
 	
-	<select id="aUserBorrow" parameterType="int" resultMap="bookMap">
+	<select id="getUserBooks" parameterType="int" resultMap="bookMap">
 		SELECT id,bookName,author FROM borrow WHERE userId = #{id};
 	</select>
 	
-	<select id="aUserBookCount" parameterType="int" resultType="int">
+	<select id="getUserBooksCount" parameterType="int" resultType="int">
 		SELECT COUNT(userId) FROM borrow WHERE userId = #{id};
 	</select>
 	
-	<insert id="insertNew" parameterType="BorrowInfo">
-		INSERT INTO borrow VALUES( #{userId} , #{bookid} , #{bookName} , #{author} , #{date} , #{isAccepted} )
+	<insert id="insertRequest" parameterType="BorrowInfo">
+		INSERT INTO borrow VALUES( #{userId} , #{bookid} , #{bookName} , #{author} , #{date} , 0 )
 	</insert>
 	
 	<update id="acceptBorrow" statementType="CALLABLE" parameterMap="acceptMap">
 		CALL acceptBorrow(?,?,?);
 	</update>
 	
-	<delete id="refuseBorrow" parameterType="BorrowInfo">
+	<delete id="deleteRequest" parameterType="BorrowInfo">
 		delete from borrow where userId= #{userId} and id=#{bookid};
 	</delete>
 

@@ -1,6 +1,7 @@
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -41,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                <button type="button" onclick="javascript:window.location.href='regist.jsp';">注册</button>
                 </div>
                 <div class="error"><span>+</span></div>
-                <div><%if(request.getAttribute("error")!=null){ %><%=request.getAttribute("error") %><%} %></div>
+                <div><c:out value="${error }"/></div>
             </form>
         </div>
  		

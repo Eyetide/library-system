@@ -1,15 +1,10 @@
 <%@page import="com.lauguobin.www.service.*,java.util.*,com.lauguobin.www.po.*"%>
 <%@ page language="Java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
+<%@taglib prefix="c" 
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
-@SuppressWarnings("unchecked")
-List<User> list = (List<User>)request.getAttribute("registRequest");
-if(list == null)
-{
-	request.getRequestDispatcher("../AuditServlet").forward(request, response);
-	return ;
-}
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html>
@@ -40,20 +35,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="manager/librarymanage.jsp">书籍</a></li>
+					<li class="active"><a href="books">书籍</a></li>
 					<li><a href="manager/addbook.jsp">上架新书</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">用户页面 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/userlist.jsp">查看用户信息</a></li>
-							<li><a href="manager/log.jsp">查看用户日志</a></li>
+							<li><a href="manager/userlist">查看用户信息</a></li>
+							<li><a href="logs">查看用户日志</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">审核信息 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="manager/audit.jsp">注册信息</a></li>
-							<li><a href="manager/borrowManage.jsp">借阅信息</a></li>
+							<li><a href="manager/tempuser">注册信息</a></li>
+							<li><a href="manager/borrowrequest">借阅信息</a></li>
 						</ul>
 					</li>
 					<li><a class="btn" href="signin.jsp">退出</a></li>
@@ -79,27 +74,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<header class="page-header">
 					<h5 class="page-title"></h5>
 				</header>
-				<%if(list.isEmpty()) {%>
-					<p class="text-danger">没有可以显示的信息！</p>
-				<%}else{ %>
 					<table >
 					<tr><th>请求用户</th><th>身份</th><th>请求时间</th><th>操作</th></tr>
-					<%for(User r : list) {%>
-					<tr>
-						<td><%= r.getUsername() %></td>
-						<td><%= r.getIdentify() %></td>
-						<td><%= r.getDate() %></td>
-						<td>
-							<form action="RequestServlet" method = "post">
-								<input type = "hidden" name = "username" value = <%=r.getUsername() %>>
-								<input type = "hidden" name = "password" value = <%= r.getPassword() %>>
-								<input type = "hidden" name = "flag" value = "yes">
-								<input type = "submit" value = "同意" >
-								<input type = "submit" value = "拒绝" onClick="this.form.flag.value='no';">
-							</form>
-						</td>
-					</tr>
-					<%}} %>
+					<c:forEach items="${registRequest}" var="r">
+						<tr>
+							<td>${r.username}</td>
+							<td>${r.identify}</td>
+							<td>${r.date}</td>
+							<td>
+								<form action="manager/request" method = "post">
+									<input type = "hidden" name = "username" value = "${r.username}">
+									<input type = "hidden" name = "password" value ="${r.password }" >
+									<input type = "hidden" name = "flag" value = "yes">
+									<input type = "submit" value = "同意" >
+									<input type = "submit" value = "拒绝" onClick="this.form.flag.value='no';">
+								</form>
+							</td>
+						</tr>
+					</c:forEach>
 				 	</table>
 			</article>
 			<!-- /Article -->
