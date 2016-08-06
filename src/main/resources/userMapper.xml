@@ -30,6 +30,10 @@
 		select userId from user where username =#{username};
 	</select>
 	
+	<select id="isFormalUser" parameterType="User" resultType="boolean">
+		select isReal from user where username =#{username};
+	</select>
+	
 	<select id="getSearchUser" resultType="User">
 		
 	</select>

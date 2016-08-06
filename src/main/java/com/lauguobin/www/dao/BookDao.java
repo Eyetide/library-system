@@ -1,6 +1,7 @@
 package com.lauguobin.www.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -38,5 +39,11 @@ public interface BookDao
 	 * @param sql
 	 * @return
 	 */
-	public List<Book> getSearchBooks(Book book);
+	public List<Book> getSearchBooksByPage(Map map);
+
+	/**
+	 * 书籍总数
+	 * @return
+	 */
+	public int getBookCount();
 }

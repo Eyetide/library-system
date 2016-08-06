@@ -74,15 +74,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<header class="page-header">
 					<h5 class="page-title"></h5>
 				</header>
-				<form action = "search" method = "post">
-					图书id<input type = "text" name = "bookid" class="search"  placeholder = "输入图书序列号">
-					         图书名称<input type = "text" name = "bookName" class="search" placeholder = "输入图书名称">
-					         作者<input type = "text" name = "author" class="search" placeholder = "输入作者名称">
-					         库存<input type = "text" name = "amont" class="search" placeholder = "输入库存">
-					<input type = "hidden" name = "token" value = "<%=tokenValue%>">
-					<%session.setAttribute("token", tokenValue); %>
-					<button class="search" type="submit">搜索</button>
-				</form>
+		<form action = "books" method = "post" id="mainForm">
+			图书id<input type = "text" name = "bookid" class="search"  placeholder = "输入图书序列号">
+			         图书名称<input type = "text" name = "bookName" class="search" placeholder = "输入图书名称">
+			         作者<input type = "text" name = "s_author" class="search" placeholder = "输入作者名称">
+			         库存<input type = "text" name = "amont" class="search" placeholder = "输入库存">
+			<input type = "hidden" name = "token" value = "<%=tokenValue%>">
+			<input type="hidden" name="currentPage" id="currentPage" value="${page.currentPage}"/>
+			<%session.setAttribute("token", tokenValue); %>
+			<button class="search" type="submit">搜索</button>
+			
 			<table>
 				<tr><th>序列号</th><th>书本名称</th><th>图片</th><th>作者</th><th>现有库存</th><th>详细</th></tr>
 				<c:forEach items="${bookList}" var="b">
@@ -95,8 +96,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td>
 						<form action = "manager/updatebook.jsp" method = "post">
 							<input type = "hidden"  name = "bookid" value = "${b.bookid}" >
-							<input type = "hidden"  name = "bookname" value = '${b.bookName}' >
-							<input type = "hidden"  name = "author" value = '${b.author }' >
+							<input type = "hidden"  name = "bookname" value = "${b.bookName}" >
+							<input type = "hidden"  name = "author" value = "${b.author }" >
 							<input type = "hidden"  name = "amont" value = "${b.amont }" >
 							<input type = "submit" name = "update"  value = "修改信息" >
 							&nbsp;&nbsp;&nbsp;
@@ -106,6 +107,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 				</c:forEach>
 			    </table>
+				    
+		    	<div>
+				共 <b>${page.totalNumber}</b> 条
+				<c:if test="${page.currentPage != 1}">
+					<a href="javascript:changeCurrentPage('1')" class='first'>首页</a>
+					<a href="javascript:changeCurrentPage('${page.currentPage-1}')" class='pre'>上一页</a>
+				</c:if>
+				当前第<span>${page.currentPage}/${page.totalPage}</span>页
+				<c:if test="${page.currentPage != page.totalPage}">
+					<a href="javascript:changeCurrentPage('${page.currentPage+1}')" class='next'>下一页</a>
+					<a href="javascript:changeCurrentPage('${page.totalPage}')" class='last'>末页</a>
+				</c:if>
+				跳至&nbsp;<input id="currentPageText" type='text' value='${page.currentPage}' class='search' style="width: 50px;" />&nbsp;页&nbsp;
+				<a href="javascript:changeCurrentPage($('#currentPageText').val())" class='go'>GO</a>
+			</div>
+	    </form>
+			    
 			</article>
 			<!-- /Article -->
 
@@ -183,5 +201,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="assets/js/headroom.min.js"></script>
 	<script src="assets/js/jQuery.headroom.min.js"></script>
 	<script src="assets/js/template.js"></script>
+	<script src="assets/js/jquery-1.8.2.min.js"></script>
+	<script src="assets/js/myscript.js"></script>
 	</body>
 </html>

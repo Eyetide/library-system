@@ -1,12 +1,15 @@
 package com.lauguobin.www.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lauguobin.www.dao.BookDao;
 import com.lauguobin.www.po.Book;
+import com.lauguobin.www.po.Page;
 import com.lauguobin.www.util.Judge;
 
 @Service
@@ -61,7 +64,7 @@ public class BookService
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Book> showBooks()
+	public List<Book> showBooks(Page page)
 	{
 		return bookDao.getExistBooks();
 	}
@@ -72,7 +75,7 @@ public class BookService
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Book> showSearchBooks(String bookid,String bookName,String author,String amont)
+	public List<Book> showSearchBooks(String bookid,String bookName,String author,String amont,Page page)
 	{
 		if(!Judge.isInteger(bookid)||"".equals(bookid))
 			bookid="-1";
@@ -84,6 +87,9 @@ public class BookService
 		
 		Book book = new Book(Integer.parseInt(bookid), bookName, author, Integer.parseInt(amont));
 		System.out.println(book);
-		return bookDao.getSearchBooks(book);
+		Map<String,Object> map = new HashMap<>();
+		map.put("book", book);
+		map.put("page", page);
+		return bookDao.getSearchBooksByPage(map);
 	}
 }

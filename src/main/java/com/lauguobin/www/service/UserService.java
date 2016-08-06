@@ -72,8 +72,11 @@ public class UserService
 	public boolean handleLogin(User user)
 	{
 		List<User> list = us.getExistUser();
+		
+		if(!us.isFormalUser(user))
+			return false;
 		for(User s : list)
-			if(s.equals(user)&&user.getIsReal())
+			if(s.equals(user))
 					return true;
 		return false;
 	}

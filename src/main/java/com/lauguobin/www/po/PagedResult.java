@@ -2,27 +2,33 @@ package com.lauguobin.www.po;
 
 import java.util.List;
 
-import com.lauguobin.www.util.BaseEntity;
-
 /** 
  */  
-public class PagedResult<T> extends BaseEntity 
+public class PagedResult<T>
 {  
       
     /*serialVersionUID*/  
-    private static final long serialVersionUID = 1L;  
   
-    private List<T> dataList;//数据  
+    private List<T> dataList;//数据
       
-    private long pageNo;//当前页  
+    private long pageNo = 0;//当前页（从第x条开始显示）
       
-    private long pageSize;//条数  
+    private long pageSize = 10;//条数  
       
     private long total;//总条数  
       
     private long pages;//总页面数目  
   
-    public List<T> getDataList() 
+    public PagedResult(long pageNo, long pageSize)
+	{
+		this.pageNo = pageNo;
+		this.pageSize = pageSize;
+	}
+    
+	public PagedResult()
+	{	}
+
+	public List<T> getDataList() 
     {  
         return dataList;  
     }  
@@ -40,7 +46,7 @@ public class PagedResult<T> extends BaseEntity
     public void setPageNo(long pageNo) 
     {  
         this.pageNo = pageNo;  
-    }  
+    }
   
     public long getPageSize() 
     {  

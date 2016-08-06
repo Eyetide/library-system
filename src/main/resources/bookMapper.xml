@@ -18,10 +18,12 @@
 		select * from book;
 	</select>
 	
-	<select id="getSearchBooks" parameterType="Book" resultMap="bookMap">
-		select * from book where bookName like #{bookName} and author like #{author} 
-		<if test='amont!=-1'> and amont = #{amont}</if>
-		<if test='bookid!=-1'> and id = #{bookid}</if>
+	<select id="getBookCount" resultType="int">
+		SELECT COUNT(*) FROM book;
+	</select>
+	
+	<select id="getSearchBooksByPage" parameterType="java.util.Map" resultMap="bookMap">
+		select * from book where bookName like #{book.bookName} and author like #{book.author}  
 	</select>
 	
 	<resultMap type="Book" id="bookMap">

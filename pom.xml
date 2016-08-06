@@ -25,7 +25,7 @@
     <dependency>
     	<groupId>org.mybatis</groupId>
     	<artifactId>mybatis</artifactId>
-    	<version>3.3.0</version>
+    	<version>3.2.8</version>
     </dependency>
     
     <dependency>
@@ -142,29 +142,8 @@
    	<artifactId>pagehelper</artifactId>
    	<version>3.6.3</version>
    </dependency>
-   <dependency>
-   	<groupId>org.springframework.data</groupId>
-   	<artifactId>spring-data-commons</artifactId>
-   	<version>1.9.3.RELEASE</version>
-   </dependency>
-   <dependency>
-   	<groupId>org.springframework.data</groupId>
-   	<artifactId>spring-data-jpa</artifactId>
-   	<version>1.7.3.RELEASE</version>
-   </dependency>
-   
-   <dependency>  
-     <groupId>com.alibaba</groupId>  
-     <artifactId>fastjson</artifactId>  
-     <version>1.1.34</version>  
-  </dependency> 
-  
-   <dependency>  
-     <groupId>net.sf.json-lib</groupId>  
-     <artifactId>json-lib</artifactId>  
-     <version>2.3</version>  
-     <classifier>jdk15</classifier>  
-   </dependency>  
+    
+    
   </dependencies>
   
   <build>

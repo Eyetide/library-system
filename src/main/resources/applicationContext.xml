@@ -34,12 +34,19 @@
 	<!-- SQLSession工厂：SqlSessionFactoryBean 
 		 dataSourse:引用数据源
 		 typeAliasesPackage:指定实体类包名，自动将实体类名映射成包名
+		 mapperLocations: 你配置的mapper.xml
+		 plugins:就是插件啦你懂的
 	-->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="ds"/>
-		<property name="typeAliasesPackage" value="com.lauguobin.www.po"/>
+		<property name="typeAliasesPackage" value="com.lauguobin.www"/>
 		<property name="mapperLocations"
         value="classpath*:/*Mapper.xml"></property>
+        <property name="plugins">
+	         <array>
+	            <bean class="com.lauguobin.www.util.PageInterceptor"></bean>
+	        </array>
+        </property>
 	</bean>
 	
 	<!-- 自动扫描加载的映射文件：MapperScannerConfigurer
@@ -49,7 +56,14 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.lauguobin.www.dao"/>
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+		
 	</bean>
+	
+	<!-- 定义SqlSessionTemplate -->  
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">  
+		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>  
+	</bean>  
+	
 	
 	<!-- 事务管理：DataSourceTransactionManager
 		 dataSourse：引用上面的数据源
@@ -60,4 +74,18 @@
 	
 	<!-- 使用声明式事务 -->
 	<tx:annotation-driven transaction-manager="tx"/>
+	
+	<!-- 注册拦截器 -->
+	<mvc:interceptors>
+		<bean class="com.lauguobin.www.util.LoginInterceptor"></bean>
+		<mvc:interceptor>
+			<mvc:mapping path="/student/*"/>
+			<bean class="com.lauguobin.www.util.StudentInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/manager/*"/>
+			<bean class="com.lauguobin.www.util.ManagerInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 </beans>

@@ -1,7 +1,6 @@
 package com.lauguobin.www.dao;
 
 import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
 import com.lauguobin.www.po.User;
@@ -57,4 +56,11 @@ public interface UserDao
 	 * @return
 	 */
 	public int getUserId(String username);
+	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public boolean isFormalUser(User user);
 }

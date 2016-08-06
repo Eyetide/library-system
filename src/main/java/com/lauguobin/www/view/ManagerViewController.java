@@ -100,7 +100,7 @@ public class ManagerViewController
 	}
 	
 	@RequestMapping("/addbook")
-	public ModelAndView addBook( MultipartHttpServletRequest request) throws IOException
+	public ModelAndView addBook(MultipartHttpServletRequest request) throws IOException
 	{
 		request.setCharacterEncoding("UTF-8");
 		ModelAndView mv = new ModelAndView("manager/addbook");
