@@ -43,7 +43,7 @@ public class BookDaoImpl implements BookDao
 	}
 
 	@Override
-	public List<Book> getSearchBooksByPage(Map map)
+	public List<Book> getSearchBooksByPage(Map<?, ?> map)
 	{
 		// TODO Auto-generated method stub
 		return null;

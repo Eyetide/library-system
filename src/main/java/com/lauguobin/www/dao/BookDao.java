@@ -39,7 +39,7 @@ public interface BookDao
 	 * @param sql
 	 * @return
 	 */
-	public List<Book> getSearchBooksByPage(Map map);
+	public List<Book> getSearchBooksByPage(Map<?, ?> map);
 
 	/**
 	 * 书籍总数

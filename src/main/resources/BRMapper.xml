@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lauguobin.www.dao.BorrowReturnDao">
 	
-	<select id="booksAmont" parameterType="int" resultType="int">
+	<select id="booksAmont" parameterType="int"  resultType="int">
 		select amont from book where id = #{id}
 	</select>
 
