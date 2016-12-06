@@ -7,7 +7,7 @@
 	</insert>
 	
 	<update id="updateRoot" parameterType="User">
-		update user set isReal=#{isReal} where username = #{username};
+		update user set is_real=#{isReal} where username = #{username};
 	</update>
 	
 	<delete id="deleteUser" parameterType="String">
@@ -19,19 +19,19 @@
 	</select>
 	
 	<select id="realUsers" resultType="User">
-		SELECT * FROM user where isReal=1;
+		SELECT * FROM user where is_real=1;
 	</select>
 		
 	<select id="getTempUsers" resultType="User">
-		select userId,username,identify,date from user where isReal=0;
+		select id,username,identify,date from user where is_real=0;
 	</select>
 	
 	<select id="getUserId" parameterType="User" resultType="int">
-		select userId from user where username =#{username};
+		select id from user where username =#{username};
 	</select>
 	
-	<select id="isFormalUser" parameterType="User" resultType="boolean">
-		select isReal from user where username =#{username};
+	<select id="isFormalUser" parameterType="User" resultType="User">
+		select * from user where username =#{username};
 	</select>
 	
 	<select id="getSearchUser" resultType="User">

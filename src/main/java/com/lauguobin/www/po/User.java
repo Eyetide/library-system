@@ -98,47 +98,26 @@ public class User implements Serializable
 	}
 
 	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((identify == null) ? 0 : identify.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		User user = (User) o;
+
+		if (userId != user.userId) return false;
+		if (isReal != user.isReal) return false;
+		if (username != null ? !username.equals(user.username) : user.username != null) return false;
+		if (password != null ? !password.equals(user.password) : user.password != null) return false;
+		return identify != null ? identify.equals(user.identify) : user.identify == null;
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (identify == null)
-		{
-			if (other.identify != null)
-				return false;
-		}
-		else if (!identify.equals(other.identify))
-			return false;
-		if (password == null)
-		{
-			if (other.password != null)
-				return false;
-		}
-		else if (!password.equals(other.password))
-			return false;
-		if (username == null)
-		{
-			if (other.username != null)
-				return false;
-		}
-		else if (!username.equals(other.username))
-			return false;
-		return true;
+	public int hashCode() {
+		int result = userId;
+		result = 31 * result + (username != null ? username.hashCode() : 0);
+		result = 31 * result + (password != null ? password.hashCode() : 0);
+		result = 31 * result + (identify != null ? identify.hashCode() : 0);
+		result = 31 * result + (isReal ? 1 : 0);
+		return result;
 	}
 }

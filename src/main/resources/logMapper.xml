@@ -3,26 +3,26 @@
 <mapper namespace="com.lauguobin.www.dao.LogDao">
 	
 	<select id="getAllLogs" resultType="Log">
-		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE u.`userId`=l.`userId` ;
+		SELECT u.`username`,l.`book_id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE u.`id`=l.`user_id` ;
 	</select>
 	
 	<select id="getOneUserLogs" parameterType="int" resultType="Log">
-		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE u.`userId`=l.`userId` AND u.`userId`=#{id};
+		SELECT u.`username`,l.`book_id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE u.`id`=l.`user_id` AND u.`id`=#{id};
 	</select>
 	
 	<select id="getBookBorrowDate" parameterType="Log"  resultType="String">
-		SELECT borrowDay FROM LOG WHERE userId = #{userId} AND id = #{id} AND other = '未还'
+		SELECT borrow_day FROM LOG WHERE user_id = #{userId} AND id = #{id} AND other = '未还'
 	</select>
 	
 	<select id="getSearch" parameterType="Log" resultType="Log">
-		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE 
-		u.`userId`=l.`userId` and u.username like #{username} and l.bookName like #{bookname} and l.other like #{other} 
+		SELECT u.`username`,l.`book_id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE
+		u.`id`=l.`user_id` and u.username like #{username} and l.book_name like #{bookname} and l.other like #{other}
 		<if test='id!=-1' >and l.id = #{id}</if>
 	</select>
 	
 	<select id="getSearchByOne" parameterType="Log" resultType="Log">
-		SELECT u.`username`,l.`id`,l.`bookName`,l.`author`,l.`borrowDay`,l.`returnDay`,l.`other` FROM USER u,LOG l WHERE 
-		u.`userId`=l.`userId` and l.bookName like #{bookname} and l.other like #{other} and u.userId = #{userId} 
+		SELECT u.`username`,l.`id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE
+		u.`id`=l.`user_id` and l.book_name like #{bookname} and l.other like #{other} and u.user_id = #{userId}
 		<if test='id!=-1' >and l.id = #{id}</if>
 	</select>
 </mapper>

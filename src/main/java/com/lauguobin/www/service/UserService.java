@@ -1,14 +1,13 @@
 package com.lauguobin.www.service;
 
-import java.util.Date;
-import java.util.List;
-
+import com.lauguobin.www.dao.UserDao;
+import com.lauguobin.www.po.User;
+import com.lauguobin.www.util.Judge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lauguobin.www.dao.UserDao;
-import com.lauguobin.www.po.*;
-import com.lauguobin.www.util.Judge;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService
@@ -71,14 +70,7 @@ public class UserService
 	 */
 	public boolean handleLogin(User user)
 	{
-		List<User> list = us.getExistUser();
-		
-		if(!us.isFormalUser(user))
-			return false;
-		for(User s : list)
-			if(s.equals(user))
-					return true;
-		return false;
+		return user.equals(us.isFormalUser(user));
 	}
 
 	/**
@@ -96,7 +88,6 @@ public class UserService
 	
 	/**
 	 * 显示所有的用户
-	 * @param isAll
 	 * @return
 	 */
 	public List<User> showUsers()

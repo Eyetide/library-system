@@ -62,5 +62,5 @@ public interface UserDao
 	 * @param user
 	 * @return
 	 */
-	public boolean isFormalUser(User user);
+	public User isFormalUser(User user);
 }

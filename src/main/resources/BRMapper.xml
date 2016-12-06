@@ -7,19 +7,19 @@
 	</select>
 
 	<select id="getAllTempBorrow" resultMap="borrowInfo">
-		SELECT u.`username`,b.`id`,b.`bookName`,b.`author`,b.`date` FROM USER u,borrow b WHERE u.`userId`=b.`userId` AND isAccepted = 0;
+		SELECT u.`username`,b.`id`,b.`book_name`,b.`author`,b.`date` FROM USER u,borrow b WHERE u.`id`=b.`user_id` AND is_accepted = 0;
 	</select>
 	
 	<select id="getUserHave"  parameterType="int" resultMap="bookMap">
-		SELECT id,bookName,author FROM borrow WHERE userId = #{id} and isAccepted = 1;
+		SELECT id,book_name,author FROM borrow WHERE user_id = #{id} and is_accepted = 1;
 	</select>
 	
 	<select id="getUserBooks" parameterType="int" resultMap="bookMap">
-		SELECT id,bookName,author FROM borrow WHERE userId = #{id};
+		SELECT id,book_name,author FROM borrow WHERE user_id = #{id};
 	</select>
 	
 	<select id="getUserBooksCount" parameterType="int" resultType="int">
-		SELECT COUNT(userId) FROM borrow WHERE userId = #{id};
+		SELECT COUNT(user_id) FROM borrow WHERE user_id = #{id};
 	</select>
 	
 	<insert id="insertRequest" parameterType="BorrowInfo">
@@ -31,7 +31,7 @@
 	</update>
 	
 	<delete id="deleteRequest" parameterType="BorrowInfo">
-		delete from borrow where userId= #{userId} and id=#{bookid};
+		delete from borrow where user_id= #{userId} and id=#{bookid};
 	</delete>
 
 	<select id="returnBook" statementType="CALLABLE" parameterMap="returnMap">
@@ -40,14 +40,14 @@
 	
 	<resultMap type="Book" id="bookMap">
 		<id property="bookid" column="id"/>
-		<result property="bookName" column="bookName"/>
+		<result property="bookName" column="book_name"/>
 		<result property="author" column="author"/>
 	</resultMap>
 	
 	<resultMap type="BorrowInfo" id="borrowInfo">
 		<id property="bookid" column="id"/>
 		<result property="username" column="username"/>
-		<result property="bookName" column="bookName"/>
+		<result property="bookName" column="book_name"/>
 		<result property="author" column="author"/>
 		<result property="date" column="date"/>
 	</resultMap>

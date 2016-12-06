@@ -7,20 +7,20 @@
 	</insert>
 	
 	<select id="getFavourates" parameterType="int" resultMap="bookMap">
-		SELECT b.* FROM favourates f,book b WHERE b.id=f.id AND userId = #{id}
+		SELECT b.* FROM favourates f,book b WHERE b.id=f.id AND user_id = #{id}
 	</select>
 	
 	<select id="getFavouratesCount" parameterType="int" resultType="int">
-		SELECT COUNT(id) FROM favourates WHERE userId = #{id};
+		SELECT COUNT(id) FROM favourates WHERE user_id = #{id};
 	</select>
 	
 	<delete id="removeFavourate" parameterType="Favourate">
-		DELETE FROM favourates WHERE userId=#{userId} AND id =#{id}; 
+		DELETE FROM favourates WHERE user_id=#{userId} AND id =#{id}; 
 	</delete>
 	
 	<resultMap type="Book" id="bookMap">
-		<id property="bookid" column="id"/>
-		<result property="bookName" column="bookName"/>
+		<id property="bookid" column="book_id"/>
+		<result property="bookName" column="book_name"/>
 		<result property="author" column="author"/>
 		<result property="amont" column="amont"/>
 	</resultMap>

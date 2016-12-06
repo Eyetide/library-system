@@ -7,7 +7,7 @@
 	</insert>
 	
 	<update id="updateBook" parameterType="Book">
-		UPDATE book SET bookName = #{bookName},author = #{author},amont = #{amont} WHERE id = #{bookid}
+		UPDATE book SET book_name = #{bookName},author = #{author},amont = #{amont} WHERE id = #{bookid}
 	</update>
 	
 	<delete id="deleteBook" parameterType="int">
@@ -23,12 +23,12 @@
 	</select>
 	
 	<select id="getSearchBooksByPage" parameterType="java.util.Map" resultMap="bookMap">
-		select * from book where bookName like #{book.bookName} and author like #{book.author}  
+		select * from book where book_name like #{book.bookName} and author like #{book.author}
 	</select>
 	
 	<resultMap type="Book" id="bookMap">
 		<id property="bookid" column="id"/>
-		<result property="bookName" column="bookName"/>
+		<result property="bookName" column="book_name"/>
 		<result property="author" column="author"/>
 		<result property="amont" column="amont"/>
 	</resultMap>
