@@ -3,7 +3,7 @@
 <mapper namespace="com.lauguobin.www.dao.FavouratesDao">
 
 	<insert id="addFavourate"  parameterType="Favourate">
-		insert into favourates values(#{userId},#{id})
+		insert into favourates values(null, #{bookid},#{userId})
 	</insert>
 	
 	<select id="getFavourates" parameterType="int" resultMap="bookMap">
