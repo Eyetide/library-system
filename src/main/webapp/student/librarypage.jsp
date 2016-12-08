@@ -87,12 +87,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<td>${b.author }</td>
 		<td>${b.amont }</td>
 		<td>
-			<form action = "student/borrowfavourate" method = "post">
-				<input type = "hidden"  name = "bookid" value = ${b.bookid } >
-				<input type = "hidden"  name = "bookName" value = '${b.bookName }' >
-				<input type = "hidden"  name = "author" value = '${b.author }' >
-				<input type = "hidden"  name = "amont" value = ${b.amont } >
-				<input type = "hidden" name = "flag" value = "borrow">
 				<c:set var="flag" value="${false}"/>
 				<c:forEach items="${sessionScope.borrowlist }" var="bl">
 					<c:if test="${b.bookid==bl.bookid }">
@@ -105,7 +99,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					库存不足
 				</c:if>
 				<c:if test="${flag==false }">
-					<input type = "submit" name = "borrow"  value = "借阅" >
+					<input type = "button" name = "borrow"  value = "借阅"  onclick="javascript:window.location.href='student/borrowfavourate?' +
+							'bookid=${b.bookid}&bookname=${b.bookName}&author=${b.author }&amont=${b.amont }&flag=borrow';" >
 				</c:if>
 				<c:set var="flag" value="${false}"/>
 				<c:forEach items="${sessionScope.favourates }" var="f">
@@ -116,9 +111,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</c:forEach>
 				
 				<c:if test="${flag==false }">
-					<input type = "submit" name = "collect" value = "收藏" onclick="this.form.flag.value = 'collect'">
+					<input type = "button" name = "collect" value = "收藏" onclick="javascript:window.location.href='student/borrowfavourate?' +
+							'bookid=${b.bookid}&bookname=${b.bookName}&author=${b.author }&amont=${b.amont }&flag=collect';">
 				</c:if>
-			</form>
 		</td>
 	</tr>
 	</c:forEach>

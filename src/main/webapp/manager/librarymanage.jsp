@@ -87,24 +87,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<table>
 				<tr><th>序列号</th><th>书本名称</th><th>图片</th><th>作者</th><th>现有库存</th><th>详细</th></tr>
 				<c:forEach items="${bookList}" var="b">
-				<tr>
-					<td>${b.bookid}</td>
-					<td>${b.bookName}</td>
-					<td><img src='assets/images/${b.bookid}.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
-					<td>${b.author }</td>
-					<td>${b.amont }</td>
-					<td>
-						<form action = "manager/updatebook.jsp" method = "post">
-							<input type = "hidden"  name = "bookid" value = "${b.bookid}" >
-							<input type = "hidden"  name = "bookname" value = "${b.bookName}" >
-							<input type = "hidden"  name = "author" value = "${b.author }" >
-							<input type = "hidden"  name = "amont" value = "${b.amont }" >
-							<input type = "submit" name = "update"  value = "修改信息" >
-							&nbsp;&nbsp;&nbsp;
-							<input type = "button" name = "delete" value = "下架书本" onclick="javascript:window.location.href='manager/delete?bookid=${b.bookid}';">
-						</form>
-					</td>
-				</tr>
+					<tr>
+						<td>${b.bookid}</td>
+						<td>${b.bookName}</td>
+						<td><img src='assets/images/${b.bookid }.jpg?random=<%=Math.random()%>' width = "120px" height = "160px"></td>
+						<td>${b.author }</td>
+						<td>${b.amont }</td>
+						<td>
+								<input type = "button" name = "update"  value = "修改信息"
+									   onclick="javascript:window.location.href='manager/updatebook.jsp?' +
+											   'bookid=${b.bookid}&bookname=${b.bookName}&author=${b.author }&amont=${b.amont }';">
+								&nbsp;&nbsp;&nbsp;
+								<input type = "button" name = "delete" value = "下架书本" onclick="javascript:window.location.href='manager/delete?bookid=${b.bookid}';">
+						</td>
+					</tr>
 				</c:forEach>
 			    </table>
 				    

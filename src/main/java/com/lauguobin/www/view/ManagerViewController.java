@@ -1,20 +1,5 @@
 package com.lauguobin.www.view;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.lauguobin.www.po.Book;
 import com.lauguobin.www.po.BorrowInfo;
 import com.lauguobin.www.po.Log;
@@ -24,6 +9,19 @@ import com.lauguobin.www.service.BorrowReturnService;
 import com.lauguobin.www.service.LogService;
 import com.lauguobin.www.service.UserService;
 import com.lauguobin.www.util.Judge;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/manager")
@@ -80,7 +78,7 @@ public class ManagerViewController
 	@RequestMapping("/request")
 	public ModelAndView registRequestHandler(@ModelAttribute("user")User user,String flag)
 	{
-		ModelAndView mv = new ModelAndView("redirect:manager/audit");
+		ModelAndView mv = new ModelAndView("redirect:audit");
 		
 		//判断前端给出的数据，执行相应的方法
 		if("yes".equals(flag))
@@ -93,7 +91,7 @@ public class ManagerViewController
 	@RequestMapping("/userlist")
 	public ModelAndView userListHandler()
 	{
-		ModelAndView mv = new ModelAndView("redirect:manager/userlist");
+		ModelAndView mv = new ModelAndView("redirect:userlist");
 		List<User> list = userService.showUsers();
 		mv.addObject("userlist", list);
 		return mv;

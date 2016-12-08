@@ -1,12 +1,12 @@
 package com.lauguobin.www.dao;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.springframework.stereotype.Repository;
-
 import com.lauguobin.www.po.Book;
 import com.lauguobin.www.po.BorrowInfo;
+import org.springframework.stereotype.Repository;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface BorrowReturnDao
@@ -23,7 +23,7 @@ public interface BorrowReturnDao
 	 * @param bookid
 	 * @param date
 	 */
-	public int acceptBorrow(int userId ,int bookid,String date);
+	public int acceptBorrow(int userId ,int bookid,Date date);
 
 	/**
 	 * 拒绝借书，直接删除临时借阅信息数据

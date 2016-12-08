@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lauguobin.www.dao.LogDao">
-	
+
+	<sql id="sql">
+		u.`username`,l.`book_id`,b.`book_name`,b.`author`,l.`borrow_day`,l.`return_day`,l.`other`
+	</sql>
+
 	<select id="getAllLogs" resultType="Log">
-		SELECT u.`username`,l.`book_id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE u.`id`=l.`user_id` ;
+		SELECT <include refid="sql"/>
+		FROM USER u,LOG l,book b WHERE u.`id`=l.`user_id` and l.book_id=b.id;
 	</select>
 	
 	<select id="getOneUserLogs" parameterType="int" resultType="Log">
-		SELECT u.`username`,l.`book_id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE u.`id`=l.`user_id` AND u.`id`=#{id};
+		SELECT <include refid="sql"/>
+		FROM USER u,LOG l, book b WHERE u.`id`=l.`user_id` AND u.`id`=#{id} and b.id=l.book_id;
 	</select>
 	
 	<select id="getBookBorrowDate" parameterType="Log"  resultType="String">
@@ -15,14 +21,16 @@
 	</select>
 	
 	<select id="getSearch" parameterType="Log" resultType="Log">
-		SELECT u.`username`,l.`book_id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE
-		u.`id`=l.`user_id` and u.username like #{username} and l.book_name like #{bookname} and l.other like #{other}
+		SELECT <include refid="sql"/>
+		FROM USER u,LOG l, book b WHERE
+		u.`id`=l.`user_id` and u.username like #{username} and b.book_name like #{bookname} and l.other like #{other}
 		<if test='id!=-1' >and l.id = #{id}</if>
 	</select>
 	
 	<select id="getSearchByOne" parameterType="Log" resultType="Log">
-		SELECT u.`username`,l.`id`,l.`book_name`,l.`author`,l.`borrow_day`,l.`return_day`,l.`other` FROM USER u,LOG l WHERE
-		u.`id`=l.`user_id` and l.book_name like #{bookname} and l.other like #{other} and u.user_id = #{userId}
+		SELECT <include refid="sql"/>
+		FROM USER u,LOG l, book b WHERE
+		u.`id`=l.`user_id` and b.book_name like #{bookname} and l.other like #{other} and u.user_id = #{userId}
 		<if test='id!=-1' >and l.id = #{id}</if>
 	</select>
 </mapper>

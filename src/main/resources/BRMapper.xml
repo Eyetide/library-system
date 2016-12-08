@@ -23,11 +23,11 @@
 	</select>
 	
 	<insert id="insertRequest" parameterType="BorrowInfo">
-		INSERT INTO borrow VALUES( #{userId} , #{bookid} , #{bookName} , #{author} , #{date} , 0 )
+		INSERT INTO borrow VALUES(null, #{userId} , #{bookid} , #{bookName} , #{author} , #{date} , 0 )
 	</insert>
 	
 	<update id="acceptBorrow" statementType="CALLABLE" parameterMap="acceptMap">
-		CALL acceptBorrow(?,?,?);
+		CALL accept_borrow(?,?,?);
 	</update>
 	
 	<delete id="deleteRequest" parameterType="BorrowInfo">
@@ -35,7 +35,7 @@
 	</delete>
 
 	<select id="returnBook" statementType="CALLABLE" parameterMap="returnMap">
-		CALL returnBook(?,?,?,?);
+		CALL return_book(?,?,?,?);
 	</select>
 	
 	<resultMap type="Book" id="bookMap">
@@ -60,8 +60,8 @@
 	</parameterMap>
 	
 	<parameterMap type="java.util.Map" id="acceptMap">
-		<parameter property="userId" mode="IN" jdbcType="INTEGER"/>
-		<parameter property="bookid" mode="IN" jdbcType="INTEGER"/>
-		<parameter property="date" mode="IN" jdbcType="VARCHAR"/>
+		<parameter property="0" mode="IN" jdbcType="INTEGER"/>
+		<parameter property="1" mode="IN" jdbcType="INTEGER"/>
+		<parameter property="2" mode="IN" jdbcType="DATE"/>
 	</parameterMap>
 </mapper>

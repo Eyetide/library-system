@@ -1,21 +1,19 @@
 package com.lauguobin.www.view;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.lauguobin.www.po.Book;
 import com.lauguobin.www.po.BorrowInfo;
 import com.lauguobin.www.po.Log;
 import com.lauguobin.www.service.BorrowReturnService;
 import com.lauguobin.www.service.FavouratesService;
 import com.lauguobin.www.service.LogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -33,7 +31,7 @@ public class StudentViewController
 	{
 		ModelAndView mv = new ModelAndView();
 		int userId = (int) session.getAttribute("userId");
-		
+		System.out.println(flag);
 		if("collect".equals(flag))
 		{
 			favouratesService.collectBook(userId, info.getBookid());

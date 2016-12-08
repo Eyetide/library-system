@@ -85,7 +85,7 @@ public class BorrowReturnService
 	@SuppressWarnings("deprecation")
 	public void toAccept(int userId,int bookid)
 	{
-		brd.acceptBorrow(userId, bookid , new Date().toLocaleString());
+		brd.acceptBorrow(userId, bookid , new Date());
 	}
 	
 	/**
