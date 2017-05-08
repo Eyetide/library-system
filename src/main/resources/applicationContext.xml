@@ -56,7 +56,6 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.lauguobin.www.dao"/>
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-		
 	</bean>
 	
 	<!-- 定义SqlSessionTemplate -->  
