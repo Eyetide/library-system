@@ -120,4 +120,16 @@ public class User implements Serializable
 		result = 31 * result + (isReal ? 1 : 0);
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"userId=" + userId +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", identify='" + identify + '\'' +
+				", isReal=" + isReal +
+				", date='" + date + '\'' +
+				'}';
+	}
 }

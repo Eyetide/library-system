@@ -9,7 +9,7 @@ import com.lauguobin.www.po.User;
 public interface UserDao
 {
 	/**
-	 * 获取所有已经通过注册用户
+	 * 获取所有用户
 	 * @param isAll
 	 * @return
 	 */

@@ -91,8 +91,12 @@ public class ManagerViewController
 	@RequestMapping("/userlist")
 	public ModelAndView userListHandler()
 	{
-		ModelAndView mv = new ModelAndView("redirect:userlist");
+		ModelAndView mv = new ModelAndView("manager/userlist");
 		List<User> list = userService.showUsers();
+
+		for (User user : list)
+			System.out.println(user);
+
 		mv.addObject("userlist", list);
 		return mv;
 	}
