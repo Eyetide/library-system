@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50715
 File Encoding         : 65001
 
-Date: 2016-12-08 21:50:35
+Date: 2018-01-07 21:52:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,7 +30,7 @@ CREATE TABLE `book` (
 -- ----------------------------
 -- Records of book
 -- ----------------------------
-INSERT INTO `book` VALUES ('1', 'haha', 'hehe', '1');
+INSERT INTO `book` VALUES ('1', 'haha', 'shufd', '2');
 INSERT INTO `book` VALUES ('10', 'wshiyibenshu', 'zuozhe', '5');
 
 -- ----------------------------
@@ -50,15 +50,12 @@ CREATE TABLE `borrow` (
   KEY `book_id` (`book_id`),
   CONSTRAINT `borrow_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `borrow_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of borrow
 -- ----------------------------
 INSERT INTO `borrow` VALUES ('1', '3', '1', 'haha', 'hehe', '2016-12-08', '1');
-INSERT INTO `borrow` VALUES ('2', '3', '10', 'wshiyibenshu', 'zuozhe', '2016-12-08', '0');
-INSERT INTO `borrow` VALUES ('3', '3', '10', 'wshiyibenshu', 'zuozhe', '2016-12-08', '0');
-INSERT INTO `borrow` VALUES ('4', '3', '10', 'wshiyibenshu', 'zuozhe', '2016-12-08', '0');
 
 -- ----------------------------
 -- Table structure for favourates
@@ -73,7 +70,7 @@ CREATE TABLE `favourates` (
   KEY `favourates_ibfk_2` (`user_id`),
   CONSTRAINT `favourates_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `favourates_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of favourates
@@ -90,12 +87,17 @@ CREATE TABLE `log` (
   `borrow_day` varchar(20) DEFAULT NULL,
   `return_day` varchar(20) NOT NULL,
   `other` varchar(2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `book_id` (`book_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `log_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of log
 -- ----------------------------
+INSERT INTO `log` VALUES ('1', '10', '3', '2016-12-27', ' ', '未还');
 
 -- ----------------------------
 -- Table structure for user
@@ -115,7 +117,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', '你妹', '123456', 'manager', '1', '2016-12-06');
-INSERT INTO `user` VALUES ('2', '哈哈哈哈', '123456', 'student', '1', '2016-12-08');
+INSERT INTO `user` VALUES ('2', '哈哈哈哈', '123456', 'student', '0', '2016-12-08');
 INSERT INTO `user` VALUES ('3', '哈哈哈哈哈', '111111', 'student', '1', '2016-12-08');
 
 -- ----------------------------
